@@ -323,9 +323,9 @@ springContext中添加以下bean定义
 ## FAQ
 
 ## Want to contribute?
-* Fork the project on https://github.com.
+* Fork the project on https://github.com/zaisan3/ti.git.
 * Wondering what to work on? See task/bug list and pick up something you would like to work on.
-* Create an issue or fix one from [issues list](http://git.zaisan.cn/ti/ti-pagecache/issues).
+* Create an issue or fix one from [issues list](https://github.com/zaisan3/ti/issues).
 * Write a blog post about how you use or extend handlebars.java.
 * Please suggest changes to javadoc/exception messages when you find something unclear.
 * If you have problems with documentation, find it non intuitive or hard to follow - let us know about it, we'll try to make it better according to your suggestions. Any constructive critique is greatly appreciated. Don't forget that this is an open source project developed and documented in spare time.

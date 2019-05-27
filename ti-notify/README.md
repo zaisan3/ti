@@ -3,7 +3,7 @@ ti-notify
 ## 一个基于redis的关心通知处理结果的通知组件
 
 
-[ti-notify](http://git.zaisan.cn/ti/ti-notify/)依托redis（大部分系统的标配组件），实现了消息发布，消息消费，和消息消费结果的收集与反馈等功能，发布者可选择的查看消费反馈， 体系简单， 接口易用，侵入性较低。
+[ti-notify](https://github.com/zaisan3/ti.git)依托redis（大部分系统的标配组件），实现了消息发布，消息消费，和消息消费结果的收集与反馈等功能，发布者可选择的查看消费反馈， 体系简单， 接口易用，侵入性较低。
 
 
 
@@ -14,7 +14,7 @@ ti-notify is a modern and full featured notify engine, but also has a very good 
 
 ![pagecache Comparison](http://git.zaisan.cn/ti/ti-notify/images/bench.png)
 
-Benchmark source code is available at: http://git.zaisan.cn/ti/ti-notify
+Benchmark source code is available at: https://github.com/zaisan3/ti.git
 
 # Getting Started
  ti-notify是基于spring-data-redis开源项目改写的，为更好的理解与使用，您可以先了解下http://projects.spring.io/spring-data-redis/
@@ -119,9 +119,9 @@ Example:
 ## FAQ
 
 ## Want to contribute?
-* Fork the project on http://git.zaisan.cn.
+* Fork the project on https://github.com/zaisan3/ti.git.
 * Wondering what to work on? See task/bug list and pick up something you would like to work on.
-* Create an issue or fix one from [issues list](http://git.zaisan.cn/ti/ti-notify/issues).
+* Create an issue or fix one from [issues list](https://github.com/zaisan3/ti/issues).
 * Write a blog post about how you use or extend ti-notify.
 * Please suggest changes to javadoc/exception messages when you find something unclear.
 * If you have problems with documentation, find it non intuitive or hard to follow - let us know about it, we'll try to make it better according to your suggestions. Any constructive critique is greatly appreciated. Don't forget that this is an open source project developed and documented in spare time.
