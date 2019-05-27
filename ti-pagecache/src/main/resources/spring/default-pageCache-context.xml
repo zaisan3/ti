@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:notify="http://www.baozun.com/schema/notify"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.baozun.com/schema/notify http://www.baozun.com/schema/notify/spring-notify.xsd">
+	<!-- 页面缓存 filter 定义 -->
+	<bean id="pageCacheFilter"
+		class="com.baozun.ti.web.pagecache.filter.SimpleCachingHeadersPageCachingFilter" >
+		<property name="configLocation"
+			value="classpath:spring/default-pagecache-ehcache-spring.xml" /> 
+	</bean>
+
+	<!-- 默认的  缓存 规则 解析类，目前 只支持  请求url+请求参数  作为缓存key, 项目中如有其它复杂需求 可以自定义，但请保持 id="pageCacheRuleResolver" -->
+	<bean id="pageCacheRuleResolver"
+		class="com.baozun.ti.web.pagecache.rulecenter.DefaultPageCacheRuleResolver" /> 
+
+	<!-- 监听 页面缓存规则的变更，和接收 缓存主动失效的命令  -->
+	<bean id="watchDog" class="com.baozun.ti.web.pagecache.watch.RedisWatchDog" />
+
+	<!-- 以下两种jedisProvider都可以选择，一种依托spring-data-redis,一种只使用jedis原生pool -->
+	<bean id="jedisProvider" class="com.baozun.ti.notify.redis.JedisSpringConnectionFactoryProvider"></bean>
+	<!-- <bean id="jedisProvider" class="com.baozun.ti.notify.redis.JedisRawPoolProvider"></bean> -->
+	<notify:listener-container namespace="ti-pagecache" jedis-provider="jedisProvider">
+	    	<notify:listener ref="watchDog" method="handleDeleteRule" topic="deleteRule" />
+	     	<notify:listener ref="watchDog" method="handleSaveOrUpdateRule" topic="saveOrUpdateRule" />
+	     	<notify:listener ref="watchDog" method="handleExpireCache" topic="expireCache" />
+	     	<notify:listener ref="watchDog" method="reloadAllRule" topic="reloadAll" />
+	</notify:listener-container>
+</beans>

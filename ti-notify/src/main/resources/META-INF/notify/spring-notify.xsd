@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.zaisan.com/schema/notify"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tool="http://www.springframework.org/schema/tool"
+    targetNamespace="http://www.zaisan.com/schema/notify"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+  <xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation><![CDATA[
+Defines the configuration elements for the Spring Data Redis support.
+Allows for configuring Redis listener containers in XML 'shortcut' style.
+    ]]></xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="listener-container">
+    <xsd:annotation>
+      <xsd:documentation><![CDATA[
+Container of Redis listeners. All listeners will be hosted by the same container.
+      ]]></xsd:documentation>
+      <xsd:appinfo>
+        <tool:annotation>
+          <tool:exports type="com.zaisan.ti.notify.spring.redis.RedisMessageListenerContainer"/>
+        </tool:annotation>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="listener" type="listenerType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="jedis-provider" type="xsd:string" default="jedisProvider">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+A reference to the Redis ConnectionFactory bean.
+Default is "redisConnectionFactory".
+          ]]></xsd:documentation>
+          <xsd:appinfo>
+            <tool:annotation kind="ref">
+              <tool:expected-type type="com.zaisan.ti.notify.redis.JedisProvider"/>
+            </tool:annotation>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="task-executor" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+A reference to a Spring TaskExecutor (or standard JDK 1.5 Executor) for executing
+Redis listener invokers. Default is a SimpleAsyncTaskExecutor.
+          ]]></xsd:documentation>
+          <xsd:appinfo>
+            <tool:annotation kind="ref">
+              <tool:expected-type type="java.util.concurrent.Executor"/>
+            </tool:annotation>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="subscription-task-executor" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+A reference to a Spring TaskExecutor (or standard JDK 1.5 Executor) for listening
+to Redis messages. By default reuses the 'task-executor' value.
+          ]]></xsd:documentation>
+          <xsd:appinfo>
+            <tool:annotation kind="ref">
+              <tool:expected-type type="java.util.concurrent.Executor"/>
+            </tool:annotation>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="topic-serializer" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+A reference to the RedisSerializer strategy for converting Redis channels/patterns to
+serialized format. Default is a StringRedisSerializer.
+          ]]></xsd:documentation>
+          <xsd:appinfo>
+            <tool:annotation kind="ref">
+              <tool:expected-type type="com.zaisan.ti.notify.spring.redis.RedisSerializer"/>
+            </tool:annotation>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="phase" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation><![CDATA[
+The lifecycle phase within which this container should start and stop. The lower
+the value the earlier this container will start and the later it will stop. The
+default is Integer.MAX_VALUE meaning the container will start as late as possible
+and stop as soon as possible.
+          ]]></xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      	    <xsd:attribute name="namespace" type="xsd:string" default="ti-notify">
+	      <xsd:annotation>
+	        <xsd:documentation><![CDATA[
+				由于消息中心可能跟别的环境共用，为避免冲突，请定义唯一namespace,默认为ti-notify
+	        ]]></xsd:documentation>
+	      </xsd:annotation>
+	    </xsd:attribute>
+      
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="listenerType">
+    <xsd:attribute name="ref" type="xsd:string" use="required">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+  The bean name of the listener object, implementing
+  the MessageListener interface or defining the specified listener method.
+  Required.
+        ]]></xsd:documentation>
+        <xsd:appinfo>
+          <tool:annotation kind="ref"/>
+        </xsd:appinfo>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="topic" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+The topics(s) to which the listener is subscribed. Can be (in Redis terminology) a 
+channel or/and a pattern. Multiple values can be specified by separating them with 
+spaces. Patterns can be specified by using the '*' character. 
+        ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="method" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+The name of the listener method to invoke. If not specified,
+the target bean is supposed to implement the MessageListener
+interface or provide a method named 'handleMessage'.
+        ]]></xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="serializer" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation><![CDATA[
+A reference to the RedisSerializer strategy for converting Redis Messages to
+listener method arguments. Default is a StringRedisSerializer.
+        ]]></xsd:documentation>
+        <xsd:appinfo>
+          <tool:annotation kind="ref">
+            <tool:expected-type type="com.zaisan.ti.notify.spring.redis.RedisSerializer"/>
+          </tool:annotation>
+        </xsd:appinfo>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+</xsd:schema>

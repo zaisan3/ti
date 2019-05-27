@@ -1,0 +1,10 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+	<!-- 每个tomcat 都有自己专属的 pageCache, 所以 该 磁盘路径 不可 配置为 网络挂载（tomcat之间共享）  -->
+	<diskStore path="pagecache/ehcache"/> 
+	<cache name="webPageCache" eternal="false" 
+		maxElementsInMemory="1000" overflowToDisk="true" diskPersistent="false"
+		timeToIdleSeconds="0" timeToLiveSeconds="300"
+		memoryStoreEvictionPolicy="LRU" >
+	</cache>
+</ehcache> 
